@@ -3,23 +3,33 @@ import sys
 
 def main():
     average = sys.stdin.readline().rstrip()
+    average = int(average)
     line = sys.stdin.readline().rstrip()
     street = line.split()
-    position = []
-    for num in range(int(average)):
-        if street[num] == '0':
-            position.append(num)
-    for x in range(int(average)):
-        if street[x] != '0':
-            min_val = abs(int(position[-1]) - x)
-            near = position[-1]
-            for val in position:
-                if abs(val - x) < min_val:
-                    min_val = abs(val - x)
-                    near = val
-            print(abs(near - x), end=' ')
-        else:
-            print(0, end=' ')
+    list_distance = []
+    position = False
+    counter_steps = 0
+    for step in range(average):
+        if street[step] == '0' and not position:
+            position = True
+            for step_return in range(step):
+                list_distance.insert(step_return, counter_steps)
+                counter_steps -= 1
+            list_distance.insert(step, counter_steps)
+            counter_steps = 1
+        elif not position:
+            counter_steps += 1
+        elif street[step] == '0' and position:
+            num = 1
+            list_distance.append(0)
+            for step_return in range(step-1, step-(counter_steps//2) - 1, -1):
+                list_distance[step_return] = num
+                num += 1
+            counter_steps = 1
+        elif position:
+            list_distance.append(counter_steps)
+            counter_steps += 1
+    print(*list_distance)
 
 
 if __name__ == '__main__':
