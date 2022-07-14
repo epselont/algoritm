@@ -1,43 +1,37 @@
-# 69375105
+# 69390248
 import sys
 
 
 class Stack:
     def __init__(self):
-        self.stack = []
+        self.__stack = []
 
     def is_empty(self):
-        return self.stack == 0
+        return self.__stack == 0
 
     def push(self, item):
-        self.stack.append(int(item))
+        self.__stack.append(int(item))
 
     def pop(self):
         if self.is_empty():
             raise IndexError
-        return self.stack.pop()
+        return self.__stack.pop()
 
 
 def Calc(line):
     stack = Stack()
     line_input = list(line.split())
+    command = {
+        '+': lambda x, y: x + y,
+        '-': lambda x, y: y - x,
+        '/': lambda x, y: y // x,
+        '*': lambda x, y: x * y
+    }
     for val in line_input:
-        if val == '+':
+        if val in command.keys():
             num1 = stack.pop()
             num2 = stack.pop()
-            stack.push(num1 + num2)
-        elif val == '-':
-            num1 = stack.pop()
-            num2 = stack.pop()
-            stack.push(num2 - num1)
-        elif val == '*':
-            num1 = stack.pop()
-            num2 = stack.pop()
-            stack.push(num1 * num2)
-        elif val == '/':
-            num1 = stack.pop()
-            num2 = stack.pop()
-            stack.push(num2 // num1)
+            stack.push(command[val](num1, num2))
         else:
             stack.push(int(val))
 
