@@ -1,74 +1,64 @@
-# 69374346
+# 69390387
 import sys
 
 
 class Deque:
     def __init__(self, max_len):
-        self.deque = [None] * max_len
-        self.max_size = max_len
-        self.head = 0
-        self.tail = 0
-        self.size = 0
+        self.__deque = [None] * max_len
+        self.__max_size = max_len
+        self.__head = 0
+        self.__tail = 0
+        self.__size = 0
 
     def is_empty(self):
-        return self.size == 0
+        return self.__size == 0
 
     def push_back(self, item):
-        if self.size == self.max_size:
+        if self.__size == self.__max_size:
             raise NotImplementedError
-        self.deque[self.tail] = item
-        self.tail = (self.tail + 1) % self.max_size
-        self.size += 1
+        self.__deque[self.__tail] = item
+        self.__tail = (self.__tail + 1) % self.__max_size
+        self.__size += 1
 
     def push_front(self, item):
-        if self.size == self.max_size:
+        if self.__size == self.__max_size:
             raise NotImplementedError
-        self.deque[self.head - 1] = item
-        self.head = (self.head - 1) % self.max_size
-        self.size += 1
+        self.__deque[self.__head - 1] = item
+        self.__head = (self.__head - 1) % self.__max_size
+        self.__size += 1
 
     def pop_back(self):
         if self.is_empty():
             raise NotImplementedError
-        item = self.deque[self.tail - 1]
-        self.deque[self.tail - 1] = None
-        self.tail = (self.tail - 1) % self.max_size
-        self.size -= 1
+        item = self.__deque[self.__tail - 1]
+        self.__deque[self.__tail - 1] = None
+        self.__tail = (self.__tail - 1) % self.__max_size
+        self.__size -= 1
         return item
 
     def pop_front(self):
         if self.is_empty():
             raise NotImplementedError
-        item = self.deque[self.head]
-        self.deque[self.head] = None
-        self.head = (self.head + 1) % self.max_size
-        self.size -= 1
+        item = self.__deque[self.__head]
+        self.__deque[self.__head] = None
+        self.__head = (self.__head + 1) % self.__max_size
+        self.__size -= 1
         return item
 
 
 def command_deque(count, len_deque):
     deq = Deque(int(len_deque))
     for i in range(int(count)):
-        command = sys.stdin.readline().rstrip()
-        command = list(command.split())
-        if command[0] == 'pop_back':
+        line = sys.stdin.readline().rstrip()
+        command, *value = line.split()
+        if not value:
             try:
-                print(deq.pop_back())
+                print(*getattr(deq, command)())
             except NotImplementedError:
                 print('error')
-        elif command[0] == 'pop_front':
+        else:
             try:
-                print(deq.pop_front())
-            except NotImplementedError:
-                print('error')
-        elif command[0] == 'push_back':
-            try:
-                deq.push_back(command[1])
-            except NotImplementedError:
-                print('error')
-        elif command[0] == 'push_front':
-            try:
-                deq.push_front(command[1])
+                getattr(deq, command)(value)
             except NotImplementedError:
                 print('error')
 
