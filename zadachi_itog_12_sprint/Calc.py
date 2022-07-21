@@ -1,6 +1,13 @@
 # 69390248
 import sys
 
+COMMAND = {
+    '+': lambda x, y: x + y,
+    '-': lambda x, y: y - x,
+    '/': lambda x, y: y // x,
+    '*': lambda x, y: x * y
+}
+
 
 class Stack:
     def __init__(self):
@@ -18,20 +25,14 @@ class Stack:
         return self.__stack.pop()
 
 
-def Calc(line):
+def calc(line):
     stack = Stack()
     line_input = list(line.split())
-    command = {
-        '+': lambda x, y: x + y,
-        '-': lambda x, y: y - x,
-        '/': lambda x, y: y // x,
-        '*': lambda x, y: x * y
-    }
     for val in line_input:
-        if val in command.keys():
+        if val in COMMAND.keys():
             num1 = stack.pop()
             num2 = stack.pop()
-            stack.push(command[val](num1, num2))
+            stack.push(COMMAND[val](num1, num2))
         else:
             stack.push(int(val))
 
@@ -41,7 +42,7 @@ def Calc(line):
 def main():
 
     line = sys.stdin.readline().rstrip()
-    print(Calc(line))
+    print(calc(line))
 
 
 if __name__ == '__main__':
